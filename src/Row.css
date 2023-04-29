@@ -13,12 +13,17 @@
 .row__posters::-webkit-scrollbar {
   display: none;
 }
-.row__poster {
+
+.row_poster{
+  margin-right: 10px;
+  transition: transform 450ms;
+}
+
+.row__poster_img {
   object-fit: contain;
   width: 100%;
+  width : 200px;
   max-height: 120px;
-  transition: transform 450ms;
-  margin-right: 10px;
 }
 
 .row__poster:hover {
@@ -40,3 +45,54 @@
 /* .row__posterLarge:hover {
   transform: scale(1.09);
 } */
+
+
+.loader{
+    background-color: #ddd;
+    height: 100px;
+    width: 200px;
+    border-radius: 4px;
+    animation: skeleton-loading 2s ease-in-out infinite;
+    margin-right: 20px ;
+}  
+@keyframes skeleton-loading {
+    0% {
+      opacity: .9; 
+    }
+    50% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: .9;
+    }
+  }
+  /* @keyframes skeleton-loading {
+    0% {
+      background-color: hsl(200, 20%, 80%);
+    }
+    100% {
+      background-color: hsl(200, 20%, 95%);
+    }
+  } */
+
+  /* .loader {
+    width: 100%;
+    height: 15px;
+    display: block;
+    background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0.5) 50%,
+        rgba(255, 255, 255, 0) 80%
+      ),
+      lightgray;
+    background-repeat: repeat-y;
+    background-size: 50px 500px;
+    background-position: 0 0;
+    animation: shine 1s infinite;
+  }
+  @keyframes shine {
+    to {
+      background-position: 100% 0,  0 0;
+    }
+  } */

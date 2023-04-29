@@ -5,7 +5,6 @@ const Nav = () => {
   const [showNav, setShowNav] = useState(false);
 
   const handleShow = () => {
-    console.log('working');
     if (window.scrollY > 100) {
 
       setShowNav(true);

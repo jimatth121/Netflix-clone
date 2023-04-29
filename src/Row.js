@@ -4,19 +4,36 @@ import "./Row.css";
 import movieTrailer from "movie-trailer";
 import YouTube from "react-youtube";
 
+
+
+const Loader = ()=>{
+  return (
+    <div className="loader" style={{ color: "white", height: 200, }}>
+  </div>
+  )
+}
 const base_url = "https://image.tmdb.org/t/p/original";
 const Row = ({ title, fetchUrl, isLargeRow }) => {
   const [movies, setMovies] = useState([]);
   const [trailerUrl, setTrailerUrl] = useState("");
+  const [isLoading, setIsLoading] = useState(false)
+  const [isImgLoaded, setImgLoaded] = useState(false)
 
   // A snippet of code wich runs on a specific condition/ variable
 
   useEffect(() => {
     // if [], run once when the row loads, and don't run again
     async function fetchData() {
-      const request = await axios.get(fetchUrl);
-      setMovies(request.data.results);
-      return request;
+      try {
+        setIsLoading(true)  
+        const request = await axios.get(fetchUrl);
+        setMovies(request.data.results);
+        return request;
+      } catch (error) {
+        console.log("error", error?.data, error?.response)
+      }finally{
+        setIsLoading(false)
+      }
     }
     fetchData();
   }, [fetchUrl]);
@@ -50,23 +67,46 @@ const Row = ({ title, fetchUrl, isLargeRow }) => {
     <div className="row">
       <h2>{title}</h2>
       <div className={`row__posters ${isLargeRow && "row__posterLarge"}`}>
-        {movies.length < 1 ? (
-          <div style={{ color: "white", height: 300, border: "2px solid red" }}>
-            "loading ..."
-          </div>
+        {isLoading ? (
+          Array(10).fill(5).map((el, index) => <Loader key={index}/>)
         ) : (
-          movies.map((movie) => (
-            <img
+          movies.map((movie, index) => {
+            console.log(movie)
+            return ( 
+              <div 
               onClick={() => handleVideo(movie)}
+              
               key={movie.id}
-              className="row__poster"
-              src={`${base_url}${
-                isLargeRow ? movie.poster_path : movie.backdrop_path
+              className="row_poster">
+                {!isImgLoaded ? (
+                  <Loader/>
+                ): (
+                  <img
+                  className="row__poster_img"
+                  src={`${base_url}/${
+                    isLargeRow ? movie?.poster_path : movie?.backdrop_path
+                  }`}
+                  alt={movies.name}
+                  />
+                )}
+              <img
+              className="row__poster_img"
+              src={`${base_url}/${
+                isLargeRow ? movie?.poster_path : movie?.backdrop_path
               }`}
+              style={{
+                display: "none"
+              }}
+              onLoad={()=> setImgLoaded(true)}
               alt={movies.name}
-            />
-          ))
-        )}
+              />
+              </div>
+              
+              )
+              
+
+            }
+            ))}
       </div>
       {trailerUrl && <YouTube videoId={trailerUrl} opts={opts} />}
     </div>
